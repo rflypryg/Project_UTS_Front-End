@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // --- VARIABEL GLOBAL ---
     const searchBox = document.getElementById('searchBox');
     const cards = document.querySelectorAll('.card');
     const ANIMATION_DURATION_MS = 300; 
@@ -20,37 +18,35 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let simulatedReviews = []; 
     
-    // Simpan urutan DOM awal untuk fungsi reset sorting
     const initialDOMOrder = {}; 
     cardContainers.forEach(container => {
         initialDOMOrder[container.parentNode.id] = Array.from(container.children);
     });
 
-    // --- 1. SLIDESHOW FEATURE ---
     let slideIndex = 0;
 
     function showSlides() {
         let slides = document.getElementsByClassName("mySlides");
         
         for (let i = 0; i < slides.length; i++) {
-            slides[i].classList.remove('active');  
+            slides[i].classList.remove('active'); 
         }
         
         slideIndex++;
-        if (slideIndex > slides.length) {slideIndex = 1}    
+        if (slideIndex > slides.length) {slideIndex = 1}
         
-        slides[slideIndex-1].classList.add('active');  
+        slides[slideIndex-1].classList.add('active'); 
         
         setTimeout(showSlides, 5000); 
     }
     showSlides();
 
 
-    // --- 2. SEARCH FILTER FEATURE ---
+   
 
     const filterCards = (query) => {
         let firstMatch = null;
-        cards.forEach(card => card.style.display = "block"); 
+        cards.forEach(card => card.style.display = "flex"); 
         
         cards.forEach(card => {
             const text = card.innerText.toLowerCase();
@@ -78,25 +74,23 @@ document.addEventListener('DOMContentLoaded', () => {
     searchBox.addEventListener('keyup', (e) => {
         const query = searchBox.value.toLowerCase();
         
-        // Reset sorting saat mencari
         sortCards('default'); 
         
         const firstMatch = filterCards(query);
 
         if (e.key === "Enter" && firstMatch) {
-            firstMatch.style.display = "block"; 
+            firstMatch.style.display = "flex"; 
             firstMatch.classList.remove("hidden");
             firstMatch.scrollIntoView({ behavior: "smooth", block: "center" });
         }
     });
 
 
-    // --- 3. SORTING A-Z / Z-A FEATURE ---
+  
 
     const sortCards = (direction) => {
         const activeSections = Array.from(contentSections).filter(section => section.style.display !== 'none');
         
-        // Atur tombol aktif
         sortButtons.forEach(btn => btn.classList.remove('active'));
         if (direction === 'az') {
             sortAZBtn.classList.add('active');
@@ -138,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resetSortBtn.addEventListener('click', () => sortCards('default'));
 
 
-    // --- 4. DETAIL MODAL & REVIEW SIMULASI FEATURE ---
+   
 
     function renderReviews(itemTitle) {
         reviewsList.innerHTML = '';
@@ -162,14 +156,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Event Klik pada Kartu -> Buka Modal
     cards.forEach(card => {
         card.addEventListener('click', () => {
             const title = card.getAttribute('data-title') || card.querySelector('h3').innerText;
             const image = card.getAttribute('data-image') || card.querySelector('img').src;
             const desc = card.getAttribute('data-desc') || card.querySelector('p').innerText;
 
-            // Isi modal
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('modalImage').src = image;
             document.getElementById('modalDescription').innerText = desc;
@@ -180,7 +172,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Event Tutup Modal
     closeBtn.onclick = () => { modal.style.display = "none"; }
     window.onclick = (event) => {
         if (event.target == modal) {
@@ -188,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Submit Ulasan Simulasi
     reviewForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
@@ -211,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // --- 5. ACTIVITY MARKING (SCROLLSPY) ---
+   
 
     const navLinks = document.querySelectorAll('.navbar ul li a');
     const sections = document.querySelectorAll('section');
@@ -234,6 +224,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Panggil sortCards('default') pertama kali agar initialDOMOrder terisi
     sortCards('default'); 
 });
